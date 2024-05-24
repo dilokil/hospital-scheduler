@@ -1,8 +1,8 @@
-package ru.dilokil.statistic.controller;
+package ru.dilokil.hospital.controller;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.web.server.WebServer;
+import org.springframework.boot.web.context.WebServerApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,16 +13,16 @@ import java.net.SocketException;
 @RestController
 @RequestMapping("/statistic")
 public class StatisticController {
-    private WebServer webServer;
+    private WebServerApplicationContext serverApplicationContext;
 
-    public StatisticController(WebServer webServer) {
-        this.webServer = webServer;
+    public StatisticController(WebServerApplicationContext serverApplicationContext) {
+        this.serverApplicationContext = serverApplicationContext;
     }
 
     @GetMapping
     public ResponseEntity<NetworkHostAndPort> getHostAndPort() throws SocketException {
         NetworkHostAndPort stat = new NetworkHostAndPort();
-        stat.setPort(webServer.getPort());
+        stat.setPort(serverApplicationContext.getWebServer().getPort());
         stat.setHost("localhost");
 
         return ResponseEntity.ok(stat);
