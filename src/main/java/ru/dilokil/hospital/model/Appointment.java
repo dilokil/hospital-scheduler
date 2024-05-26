@@ -1,5 +1,6 @@
 package ru.dilokil.hospital.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,12 @@ public class Appointment {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
     private LocalDateTime appointmentStartTime;

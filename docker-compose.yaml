@@ -9,8 +9,9 @@ services:
       - "8080:80"
   backend1:
     image: ghcr.io/dilokil/hospital-scheduler/hospital-scheduler:latest
-#    ports:
-#      - "8081:80"
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     depends_on:
       - postgres
     environment:
@@ -18,8 +19,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/hospital
   backend2:
     image: ghcr.io/dilokil/hospital-scheduler/hospital-scheduler:latest
-#    ports:
-#      - "8082:81"
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     depends_on:
       - postgres
     environment:
@@ -35,6 +37,23 @@ services:
       POSTGRES_DB: hospital
     volumes:
       - postgres:/var/lib/postgresql/data
+
+  grafana:
+    build: './config/grafana'
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
 
 volumes:
   postgres:
